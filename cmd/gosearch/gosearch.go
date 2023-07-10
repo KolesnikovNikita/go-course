@@ -37,7 +37,7 @@ func main() {
 	flag.Parse()
 
 	if *searchWord == "" {
-		fmt.Println("Не указано слово для поиска, укажите пожалуйста")
+		fmt.Println("Не указано слово для поиска")
 		return
 	} else {
 		match := checkUrlsForWord(urlList, *searchWord)
