@@ -3,34 +3,31 @@ package main
 import (
 	"flag"
 	"fmt"
+	"gosearch/pkg/crawler"
 	"gosearch/pkg/crawler/spider"
 	"strings"
 )
 
 func main() {
-	var urlList []string
 
+	var urlList []crawler.Document
 
+	urls := []string{
+		"https://go.dev",
+		"https://golang.org",
+	}
 
-	url_1 := "https://go.dev"
-	url_2 := "https://golang.org"
 	scanner := spider.New()
 
-	data_1, err := scanner.Scan(url_1, 2)
-	if err != nil {
-		panic(err)
-	}
-	
-	data_2, err := scanner.Scan(url_2, 2)
-	if err != nil {
-		panic(err)
+	for _, url := range urls {
+		data, err := scanner.Scan(url, 2)
+		if err != nil {
+			fmt.Print(err)
+		}
+		urlList = append(urlList, data...)
 	}
 
-	result := append(data_1, data_2...)
 
-	for _, v := range result {
-		urlList = append(urlList, v.URL)
-	}
 
 
 	searchWord := flag.String("s", "", "--help")
@@ -45,18 +42,18 @@ func main() {
 			fmt.Println("Совпадений не найдено")
 		}
 	for _, value := range match {
-		fmt.Println(value)
+		fmt.Printf("%s\n", value)
 	  }
 	}
 
 	}
 
 			
-	func checkUrlsForWord(arr []string, w string) []string  {
+	func checkUrlsForWord(arr []crawler.Document, w string) []string  {
 		var matchList []string
 		for _, v := range arr {
-			if strings.Contains(v, w) {
-				matchList = append(matchList, v)
+			if strings.Contains(v.URL, w) {
+				matchList = append(matchList, v.URL)
 			}
 		}
 		
